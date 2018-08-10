@@ -80,6 +80,12 @@ function DisplaySystem(){
   elseif ($cpuload > 75) { $cpuload_status = "warning"; }
   elseif ($cpuload >  0) { $cpuload_status = "success"; }
 
+  $battery = exec("cat /home/pi/dev/checkBattery/battery");
+  $fBat = floatval($battery);
+  $maxVoltage = 13.6;
+  $minVoltage = 11;
+  $fBat = (($fBat - $minVoltage) / ($maxVoltage-$minVoltage)) * 100;
+
   ?>
   <div class="row">
   <div class="col-lg-12">
@@ -105,7 +111,8 @@ function DisplaySystem(){
       <h4>System Information</h4>
       <div class="info-item">Hostname</div> <?php echo $hostname ?></br>
       <div class="info-item">Pi Revision</div> <?php echo RPiVersion() ?></br>
-      <div class="info-item">Uptime</div>   <?php echo $uptime ?></br></br>
+      <div class="info-item">Uptime</div>   <?php echo $uptime ?></br>
+      <div class="info-item">Battery</div>   <?php echo $battery ?> Volt</br></br>
       <div class="info-item">Memory Used</div>
         <div class="progress">
         <div class="progress-bar progress-bar-<?php echo $memused_status ?> progress-bar-striped active"
@@ -120,6 +127,14 @@ function DisplaySystem(){
           role="progressbar"
           aria-valuenow="<?php echo $cpuload ?>" aria-valuemin="0" aria-valuemax="100"
           style="width: <?php echo $cpuload ?>%;"><?php echo $cpuload ?>%
+        </div>
+        </div>
+      <div class="info-item">Battery</div>
+        <div class="progress">
+        <div class="progress-bar progress-bar-<?php echo $cpuload_status ?> progress-bar-striped active"
+          role="progressbar"
+          aria-valuenow="<?php echo $fBat ?>" aria-valuemin="0" aria-valuemax="100"
+          style="width: <?php echo $fBat ?>%;"><?php echo $battery ?> Volt
         </div>
         </div>
     </div><!-- /.panel-body -->
